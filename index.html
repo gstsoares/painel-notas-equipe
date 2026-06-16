@@ -45,10 +45,10 @@
   .sep{opacity:.4;}
 
   .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:14px;backdrop-filter:blur(10px);margin-bottom:38px;}
-  .toolbar input[type="text"]{flex:1;min-width:200px;height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--glass-border);background:rgba(0,0,0,0.18);color:var(--ink);font-size:14px;font-family:inherit;}
-  .toolbar input[type="text"]::placeholder{color:var(--muted);}
+  .toolbar input[type="text"]{flex:1;min-width:200px;height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--glass-border);background:rgba(0,0,0,0.18);color:var(--ink);font-size:14px;font-weight:600;font-family:inherit;}
+  .toolbar input[type="text"]::placeholder{color:var(--muted);font-weight:500;}
   .toolbar input[type="text"]:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(242,193,78,.2);}
-  select{height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--glass-border);background:rgba(0,0,0,0.18);color:var(--ink);font-size:13.5px;font-family:inherit;cursor:pointer;}
+  select{height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--glass-border);background:rgba(0,0,0,0.18);color:var(--ink);font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;}
   select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .section-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
   .colors{display:flex;gap:6px;align-items:center;}
@@ -62,12 +62,12 @@
 
   .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:34px 18px;padding-top:6px;min-height:120px;}
 
-  .note{position:relative;padding:18px 16px 14px;border-radius:8px;box-shadow:0 14px 24px -12px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.18);font-size:14px;line-height:1.55;word-break:break-word;transform:rotate(var(--rot,0deg));transition:transform .15s ease;color:#2b2a26;}
+  .note{position:relative;padding:18px 16px 14px;border-radius:8px;box-shadow:0 14px 24px -12px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.18);font-size:16px;line-height:1.5;word-break:break-word;transform:rotate(var(--rot,0deg));transition:transform .15s ease;color:#221f1a;}
   .note:hover{transform:rotate(var(--rot,0deg)) translateY(-3px);}
   .note::before{content:'';position:absolute;top:-9px;left:50%;width:14px;height:14px;border-radius:50%;transform:translateX(-50%);background:radial-gradient(circle at 35% 35%,#fff7d6,#d8a93b 70%,#92651c 100%);box-shadow:0 3px 4px rgba(0,0,0,.4);}
-  .note .note-text{white-space:pre-wrap;}
-  .note .note-meta{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;opacity:.75;}
-  .avatar{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
+  .note .note-text{white-space:pre-wrap;font-weight:700;}
+  .note .note-meta{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11.5px;font-weight:600;opacity:.78;}
+  .avatar{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:#fff;flex-shrink:0;}
   .del-btn{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.08);color:inherit;font-size:14px;line-height:1;cursor:pointer;opacity:0;display:flex;align-items:center;justify-content:center;transition:opacity .15s,background .15s;padding:0;}
   .note:hover .del-btn{opacity:.7;}
   .del-btn:hover{opacity:1 !important;background:rgba(0,0,0,.18);}
@@ -112,11 +112,10 @@
     <div class="toolbar">
       <input type="text" id="noteInput" maxlength="200" placeholder="Escreva um recado para a equipe…" />
       <select id="authorSelect" aria-label="Autor da nota">
-        <option value="Você">Você</option>
-        <option value="Ana">Ana</option>
-        <option value="Bruno">Bruno</option>
-        <option value="Carol">Carol</option>
-        <option value="Diego">Diego</option>
+        <option value="Gustavo">Gustavo</option>
+        <option value="Nice">Nice</option>
+        <option value="Gui">Gui</option>
+        <option value="Lala">Lala</option>
       </select>
       <span class="section-label">Cor</span>
       <div class="colors">
