@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#141f1c" />
+<title>Mural da Equipe</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📌</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg-deep:#141f1c;
+    --bg-mid:#1c2a26;
+    --ink:#f4f1e8;
+    --muted:#a8b2ac;
+    --glass:rgba(255,255,255,0.05);
+    --glass-border:rgba(255,255,255,0.09);
+    --accent:#f2c14e;
+    --accent-ink:#2b2316;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{
+    min-height:100vh;
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 18%, rgba(242,193,78,0.10), transparent 38%),
+      radial-gradient(circle at 88% 82%, rgba(143,203,234,0.08), transparent 42%),
+      linear-gradient(160deg, var(--bg-mid), var(--bg-deep));
+    background-attachment:fixed;
+  }
+  .page{max-width:1080px;margin:0 auto;padding:32px 20px 60px;}
+
+  .topbar{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:26px;}
+  .brand-group{display:flex;flex-direction:column;gap:2px;}
+  .brand{font-family:'Caveat',cursive;font-size:clamp(2rem,5vw,2.6rem);font-weight:700;letter-spacing:.01em;color:var(--ink);text-shadow:0 2px 10px rgba(0,0,0,.25);line-height:1;}
+  .tagline{font-size:12.5px;color:var(--muted);margin-left:2px;}
+  .status-pill{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);background:var(--glass);border:1px solid var(--glass-border);padding:7px 14px;border-radius:999px;backdrop-filter:blur(8px);white-space:nowrap;}
+  .dot{width:8px;height:8px;border-radius:50%;background:#7cd992;flex-shrink:0;animation:pulse 2s infinite;}
+  .dot.offline{background:#e0716b;animation:none;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,217,146,.5);}70%{box-shadow:0 0 0 6px rgba(124,217,146,0);}100%{box-shadow:0 0 0 0 rgba(124,217,146,0);}}
+  .sep{opacity:.4;}
+
+  .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:14px;backdrop-filter:blur(10px);margin-bottom:38px;}
+  .toolbar input[type="text"]{flex:1;min-width:200px;height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--glass-border);background:rgba(0,0,0,0.18);color:var(--ink);font-size:14px;font-family:inherit;}
+  .toolbar input[type="text"]::placeholder{color:var(--muted);}
+  .toolbar input[type="text"]:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(242,193,78,.2);}
+  select{height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--glass-border);background:rgba(0,0,0,0.18);color:var(--ink);font-size:13.5px;font-family:inherit;cursor:pointer;}
+  select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .section-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .colors{display:flex;gap:6px;align-items:center;}
+  .color-btn{width:24px;height:24px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;}
+  .color-btn:hover{transform:scale(1.12);}
+  .color-btn.active{border-color:var(--ink);}
+  .color-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .add-btn{display:flex;align-items:center;gap:6px;height:40px;padding:0 18px;border:none;border-radius:10px;background:linear-gradient(135deg,#ffe08a,var(--accent));color:var(--accent-ink);font-weight:600;font-size:14px;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s;}
+  .add-btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px -6px rgba(242,193,78,.5);}
+  .add-btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+
+  .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:34px 18px;padding-top:6px;min-height:120px;}
+
+  .note{position:relative;padding:18px 16px 14px;border-radius:8px;box-shadow:0 14px 24px -12px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.18);font-size:14px;line-height:1.55;word-break:break-word;transform:rotate(var(--rot,0deg));transition:transform .15s ease;color:#2b2a26;}
+  .note:hover{transform:rotate(var(--rot,0deg)) translateY(-3px);}
+  .note::before{content:'';position:absolute;top:-9px;left:50%;width:14px;height:14px;border-radius:50%;transform:translateX(-50%);background:radial-gradient(circle at 35% 35%,#fff7d6,#d8a93b 70%,#92651c 100%);box-shadow:0 3px 4px rgba(0,0,0,.4);}
+  .note .note-text{white-space:pre-wrap;}
+  .note .note-meta{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;opacity:.75;}
+  .avatar{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
+  .del-btn{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.08);color:inherit;font-size:14px;line-height:1;cursor:pointer;opacity:0;display:flex;align-items:center;justify-content:center;transition:opacity .15s,background .15s;padding:0;}
+  .note:hover .del-btn{opacity:.7;}
+  .del-btn:hover{opacity:1 !important;background:rgba(0,0,0,.18);}
+  .del-btn:focus-visible{opacity:1;outline:2px solid #2b2a26;outline-offset:1px;}
+
+  .note.entering{animation:pinIn .32s ease-out;}
+  @keyframes pinIn{from{opacity:0;transform:rotate(var(--rot,0deg)) scale(.82) translateY(8px);}to{opacity:1;transform:rotate(var(--rot,0deg)) scale(1) translateY(0);}}
+  .note.leaving{animation:pinOut .22s ease-in forwards;pointer-events:none;}
+  @keyframes pinOut{from{opacity:1;transform:rotate(var(--rot,0deg)) scale(1);}to{opacity:0;transform:rotate(var(--rot,0deg)) scale(.85) translateY(-6px);}}
+
+  .empty-state{display:flex;flex-direction:column;align-items:center;gap:10px;padding:70px 20px;color:var(--muted);text-align:center;}
+  .empty-state .pin-icon{font-size:30px;opacity:.7;}
+  .empty-state p{margin:0;line-height:1.6;max-width:320px;}
+
+  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:30px;font-size:12.5px;color:var(--muted);}
+  .clear-btn{background:none;border:none;color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline;font-family:inherit;padding:0;}
+  .clear-btn:hover{color:var(--ink);}
+  .clear-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  @media (prefers-reduced-motion: reduce){
+    .note.entering,.note.leaving{animation:none !important;}
+    .dot{animation:none !important;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand-group">
+        <h1 class="brand">Mural da Equipe</h1>
+        <p class="tagline">recados rápidos do dia a dia — o que não é tarefa do Monday entra aqui</p>
+      </div>
+      <div class="status-pill">
+        <span class="dot" id="liveDot"></span>
+        <span id="statusText">conectando…</span>
+        <span class="sep">·</span>
+        <span id="onlineCount">—</span>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" id="noteInput" maxlength="200" placeholder="Escreva um recado para a equipe…" />
+      <select id="authorSelect" aria-label="Autor da nota">
+        <option value="Você">Você</option>
+        <option value="Ana">Ana</option>
+        <option value="Bruno">Bruno</option>
+        <option value="Carol">Carol</option>
+        <option value="Diego">Diego</option>
+      </select>
+      <span class="section-label">Cor</span>
+      <div class="colors">
+        <button type="button" class="color-btn active" data-color="#FFD66B" style="background:#FFD66B" title="Amarelo" aria-label="Amarelo"></button>
+        <button type="button" class="color-btn" data-color="#8FDFB0" style="background:#8FDFB0" title="Verde" aria-label="Verde"></button>
+        <button type="button" class="color-btn" data-color="#8FCBEA" style="background:#8FCBEA" title="Azul" aria-label="Azul"></button>
+        <button type="button" class="color-btn" data-color="#F3A6B8" style="background:#F3A6B8" title="Rosa" aria-label="Rosa"></button>
+        <button type="button" class="color-btn" data-color="#C9A8EE" style="background:#C9A8EE" title="Roxo" aria-label="Roxo"></button>
+      </div>
+      <button type="button" class="add-btn" id="addBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="4" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
+        Fixar nota
+      </button>
+    </div>
+
+    <main class="board" id="board"></main>
+    <div class="empty-state" id="emptyState" style="display:flex;">
+      <div class="pin-icon">📌</div>
+      <p>Nenhum recado por aqui ainda. Seja o primeiro a fixar um para a equipe.</p>
+    </div>
+
+    <div class="footer">
+      <span id="noteCount">0 recados</span>
+      <button type="button" class="clear-btn" id="clearBtn">Limpar tudo</button>
+    </div>
+  </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import {
+  getDatabase, ref, push, remove, set, onChildAdded, onChildRemoved, onValue, onDisconnect
+} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAiV_L6GJq2PLchRJMIH3bU9Ppz7WA05bk",
+  authDomain: "painel-notas-equipe.firebaseapp.com",
+  databaseURL: "https://painel-notas-equipe-default-rtdb.firebaseio.com",
+  projectId: "painel-notas-equipe",
+  storageBucket: "painel-notas-equipe.firebasestorage.app",
+  messagingSenderId: "192523788912",
+  appId: "1:192523788912:web:64fed7d972d965db074ab5"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const notesRef = ref(db, "notes");
+const presenceRef = ref(db, "presence");
+const connectedRef = ref(db, ".info/connected");
+
+const boardEl = document.getElementById("board");
+const emptyStateEl = document.getElementById("emptyState");
+const noteCountEl = document.getElementById("noteCount");
+const statusTextEl = document.getElementById("statusText");
+const liveDotEl = document.getElementById("liveDot");
+const onlineCountEl = document.getElementById("onlineCount");
+
+const AVATAR_COLORS = ["#E0716B","#5FA8D3","#6FBF8B","#C98ED9","#E0A458","#7C8CE0"];
+
+function hashString(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+  return h;
+}
+function avatarColor(name) { return AVATAR_COLORS[hashString(name) % AVATAR_COLORS.length]; }
+function noteRotation(id) { const h = hashString(id); return (((h % 9) - 4) * 0.5) + "deg"; }
+function initials(name) { return (name || "?").trim().slice(0, 1).toUpperCase(); }
+function formatTimestamp(ts) {
+  const d = new Date(ts);
+  const time = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  const date = d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+  return date + " · " + time;
+}
+
+let noteCount = 0;
+function updateCount(delta) {
+  noteCount += delta;
+  noteCountEl.textContent = noteCount === 1 ? "1 recado" : noteCount + " recados";
+  emptyStateEl.style.display = noteCount === 0 ? "flex" : "none";
+}
+
+function createNoteElement(id, note) {
+  const el = document.createElement("article");
+  el.className = "note entering";
+  el.dataset.id = id;
+  el.style.background = note.color;
+  el.style.setProperty("--rot", noteRotation(id));
+
+  const delBtn = document.createElement("button");
+  delBtn.type = "button";
+  delBtn.className = "del-btn";
+  delBtn.setAttribute("aria-label", "Remover nota");
+  delBtn.title = "Remover";
+  delBtn.textContent = "×";
+  delBtn.addEventListener("click", () => remove(ref(db, "notes/" + id)));
+
+  const textEl = document.createElement("div");
+  textEl.className = "note-text";
+  textEl.textContent = note.text;
+
+  const meta = document.createElement("div");
+  meta.className = "note-meta";
+
+  const avatar = document.createElement("span");
+  avatar.className = "avatar";
+  avatar.style.background = avatarColor(note.author);
+  avatar.textContent = initials(note.author);
+
+  const who = document.createElement("span");
+  who.textContent = (note.author || "?") + " · " + formatTimestamp(note.createdAt);
+
+  meta.append(avatar, who);
+  el.append(delBtn, textEl, meta);
+  el.addEventListener("animationend", () => el.classList.remove("entering"), { once: true });
+  return el;
+}
+
+onChildAdded(notesRef, (snapshot) => {
+  const note = snapshot.val();
+  const id = snapshot.key;
+  if (boardEl.querySelector('[data-id="' + id + '"]')) return;
+  const el = createNoteElement(id, note);
+  boardEl.insertBefore(el, boardEl.firstChild);
+  updateCount(1);
+});
+
+onChildRemoved(notesRef, (snapshot) => {
+  const id = snapshot.key;
+  const el = boardEl.querySelector('[data-id="' + id + '"]');
+  if (el) {
+    el.classList.add("leaving");
+    el.addEventListener("animationend", () => el.remove(), { once: true });
+  }
+  updateCount(-1);
+});
+
+onValue(connectedRef, (snap) => {
+  const isConnected = snap.val() === true;
+  if (isConnected) {
+    statusTextEl.textContent = "Em tempo real";
+    liveDotEl.classList.remove("offline");
+    const myPresenceRef = push(presenceRef);
+    set(myPresenceRef, true);
+    onDisconnect(myPresenceRef).remove();
+  } else {
+    statusTextEl.textContent = "Sem conexão";
+    liveDotEl.classList.add("offline");
+  }
+});
+
+onValue(presenceRef, (snap) => {
+  const count = snap.exists() ? Object.keys(snap.val()).length : 0;
+  onlineCountEl.textContent = (count === 1 ? "1 online" : count + " online");
+});
+
+const input = document.getElementById("noteInput");
+const authorSelect = document.getElementById("authorSelect");
+const addBtn = document.getElementById("addBtn");
+let selectedColor = "#FFD66B";
+
+document.querySelectorAll(".color-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".color-btn").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedColor = btn.dataset.color;
+  });
+});
+
+function addNote() {
+  const text = input.value.trim();
+  if (!text) return;
+  push(notesRef, {
+    text: text,
+    color: selectedColor,
+    author: authorSelect.value,
+    createdAt: Date.now()
+  });
+  input.value = "";
+  input.focus();
+}
+addBtn.addEventListener("click", addNote);
+input.addEventListener("keydown", (e) => { if (e.key === "Enter") addNote(); });
+
+const clearBtn = document.getElementById("clearBtn");
+let confirmTimer = null;
+function resetClearBtn() {
+  clearBtn.dataset.confirm = "false";
+  clearBtn.textContent = "Limpar tudo";
+  clearTimeout(confirmTimer);
+}
+clearBtn.addEventListener("click", () => {
+  if (clearBtn.dataset.confirm === "true") {
+    remove(notesRef);
+    resetClearBtn();
+  } else {
+    clearBtn.dataset.confirm = "true";
+    clearBtn.textContent = "Clique de novo para apagar tudo";
+    confirmTimer = setTimeout(resetClearBtn, 3000);
+  }
+});
+</script>
+</body>
+</html>
